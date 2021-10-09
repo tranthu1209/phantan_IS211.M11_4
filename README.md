@@ -15,5 +15,5 @@ STT | Họ tên | MSSV | Github
 --- | -------|------|--------
 1 | Trần Quốc Thành | 18521414 | https://github.com/QuocThanh21
 2 | Trần Anh Thư | 18521464 | https://github.com/tranthu1209
-3 | Trần Minh Quân | 18521288 | 
-4 | Hồ Anh Dũng| 18520630 | 
+3 | Trần Minh Quân | 18521288 | https://github.com/TranMinhQuan3010
+4 | Hồ Anh Dũng| 18520630 | https://github.com/Ho-Anh-Dung
