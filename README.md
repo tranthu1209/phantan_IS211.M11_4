@@ -13,7 +13,7 @@ A repository that contains the project of Nhom4.
 ## Thông tin nhóm
 STT | Họ tên | MSSV | Github
 --- | -------|------|--------
-1 | Trần Quốc Thành | 18521414 | 
+1 | Trần Quốc Thành | 18521414 | https://github.com/QuocThanh21
 2 | Trần Anh Thư | 18521464 | https://github.com/tranthu1209
 3 | Trần Minh Quân | 18521288 | 
 4 | Hồ Anh Dũng| 18520630 | 
