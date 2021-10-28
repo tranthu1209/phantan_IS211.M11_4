@@ -111,7 +111,7 @@ BEGIN
     WHERE CB.MAHANG = :NEW.MAHANG;
     
     IF (v_batdau <= :NEW.NGTL) THEN
-        RAISE_APPLICATION_ERROR(-20100, 'Ngày bắt đầu chuyến bay luôn 
+        RAISE_APPLICATION_ERROR(-20000, 'Ngày bắt đầu chuyến bay luôn 
             lớn hơn ngày thành lập hãng hàng không quản lý chuyến bay đó');
     END IF;    
 END;
@@ -145,7 +145,7 @@ BEGIN
     WHERE HHK.MAHANG = :NEW.MAHANG;
     
     IF (:NEW.BATDAU <= v_ngtl) THEN
-        RAISE_APPLICATION_ERROR(-20100, 'Ngày bắt đầu chuyến bay luôn 
+        RAISE_APPLICATION_ERROR(-20000, 'Ngày bắt đầu chuyến bay luôn 
             lớn hơn ngày thành lập hãng hàng không quản lý chuyến bay đó');
     END IF;    
 END;
