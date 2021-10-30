@@ -1,0 +1,20 @@
+BÀI THỰC HÀNH SỐ 3
+KIỂM TRA DATABASELINK VÀ TRUY VẤN PHÂN TÁN
+
+MÔN: Cơ sở dữ liệu phân tán
+LỚP: IS211.M11.2
+
+GVLT: ThS. Thái Bảo Trân
+GVHD TH: Thầy Nguyễn Minh Nhựt
+
+Nhóm sinh viên thực hiện: Nhóm 4
+STT	Tên		   MSSV
+1	Trần Quốc Thành	   18521414
+2	Trần Anh Thư	   18521464
+3	Trần Minh Quân	   18521288
+4	Hồ Anh Dũng	   18520630
+
+Link Youtube quá trình làm bài kiểm tra TH3:
+https://drive.google.com/drive/folders/1B-6hhSKNv0qPtuzx_opvbZ55YqbnneBU?usp=sharing
+
+
