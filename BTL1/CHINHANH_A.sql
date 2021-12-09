@@ -20,7 +20,7 @@ CREATE TABLE CNA.LOAIPHONG
 CREATE TABLE CNA.CHINHANH(
 	MACN char(3) PRIMARY KEY, 
 	TENCN varchar2(30) NOT NULL,
-    DIACHI varchar2(80) NOT NULL,
+	DIACHI varchar2(80) NOT NULL,
 	SDT char(10) NOT NULL UNIQUE
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE CNA.KHACHHANG(
 	CMND char(9) NOT NULL,
 	SDT varchar2(10) NOT NULL UNIQUE,
 	QUOCTICH varchar2(30),
-    MACN char(3) REFERENCES CNA.CHINHANH(MACN)
+	MACN char(3) REFERENCES CNA.CHINHANH(MACN)
 );
 
 CREATE TABLE CNA.PHIEU_DK_P(
@@ -76,11 +76,11 @@ CREATE TABLE CNA.DICHVU(
 );
 
 CREATE TABLE CNA.DK_DV(
-    MADK_DV char(7) PRIMARY KEY,
+	MADK_DV char(7) PRIMARY KEY,
 	MADV char(4) REFERENCES CNA.DICHVU(MADV),
 	MAPDK char(5) REFERENCES CNA.PHIEU_DK_P(MAPDK),
 	NGAYDK_DV date NOT NULL,
-    MACN char(3) REFERENCES CNA.CHINHANH(MACN)
+	MACN char(3) REFERENCES CNA.CHINHANH(MACN)
 );
 
 CREATE TABLE CNA.HOADON_QL(
@@ -123,12 +123,12 @@ PHIEU_DK_P  -	  -	     +(NGAYDK_P)
 -- Trigger INSERT, UPDATE trên bảng DK_DV
 CREATE OR REPLACE TRIGGER INSERT_UPDATE_DK_DV
 AFTER INSERT OR UPDATE
-ON CNA.DK_DV FOR EACH ROW
+ON CNB.DK_DV FOR EACH ROW
 DECLARE
     v_ngaydk_p DATE;
 BEGIN
     SELECT NGAYDK_P INTO v_ngaydk_p
-    FROM CNA.PHIEU_DK_P PDK_P
+    FROM CNB.PHIEU_DK_P PDK_P
     WHERE PDK_P.MAPDK = :NEW.MAPDK;
     
     IF (:NEW.NGAYDK_DV < v_ngaydk_p) THEN
@@ -141,12 +141,12 @@ END;
 -- Trigger UPDATE trên bảng PHIEU_DK_P
 CREATE OR REPLACE TRIGGER UPDATE_DK_P
 AFTER UPDATE
-ON CNA.PHIEU_DK_P FOR EACH ROW
+ON CNB.PHIEU_DK_P FOR EACH ROW
 DECLARE
     v_ngaydk_dv DATE;
 BEGIN
     SELECT NGAYDK_DV INTO v_ngaydk_dv
-    FROM CNA.DK_DV DK_DV
+    FROM CNB.DK_DV DK_DV
     WHERE DK_DV.MAPDK = :NEW.MAPDK;
     
     IF (:NEW.NGAYDK_P > v_ngaydk_dv) THEN
@@ -529,90 +529,13 @@ SELECT * FROM CNA.HOADON_QL;
 SELECT * FROM CNA.HOADON_NV;
 
 -------------------------------------------------------------------------------
--- 2.5 Kiểm tra Trigger
--- Trigger: Ngày đăng ký dịch vụ không được trước ngày đăng ký phòng 
---          NGAYDK_DV >= NGAYDK_P
-
-/*
-- Bối cảnh: PHIEU_DK_P, DK_DV
-
-- Nội dung: Với mọi pdk_p thuộc PHIEU_DK_P, tồn tại dk_dv thuộc DK_DV: 
-    pdk_p.MAPDK = dk_dv.MAPDK và NGAYDK_DV >= NGAYDK_P 
-                
-- Bảng tầm ảnh hưởng:
-          Thêm	 Xóa	Sửa
-DK_DV	    +	  -	     +(NGAYDK_DV, MAPDK)
-PHIEU_DK_P  -	  -	     +(NGAYDK_P)
-
-*/
--- Trigger INSERT, UPDATE trên bảng DK_DV
--- Kiểm tra DL đang có
-SELECT PDK_P.MAPDK, NGAYDK_P, NGAYDK_DV
-FROM CNA.PHIEU_DK_P PDK_P JOIN CNA.DK_DV DK_DV ON PDK_P.MAPDK = DK_DV.MAPDK;
-
--- TH UPDATE
--- TH lỗi: VN: NGAYDK_P = , NGAYDK_DV = '' 
---          -> Sửa NGAYDK_DV = 
-UPDATE CNA.DK_DV
-SET NGAYDK_DV = ''
-WHERE MAPDK = '';
-
--- TH thành công: VN: NGAYDK_P = , NGAYDK_DV = '' 
---          -> Sửa NGAYDK_DV = 
-UPDATE CNA.DK_DV
-SET NGAYDK_DV = ''
-WHERE MAPDK = '';
-
-
--- TH INSERT
--- TH lỗi: VN: NGAYDK_P = 
---          -> Thêm DK_DV có NGAYDK_DV = 
--- INSERT INTO CNA.DK_DV VALUES ();
-
-
--- TH thành công: VN: NGAYDK_P = 15/01/1956
---          -> Thêm DK_DV có NGAYDK_DV = 
---INSERT INTO CNA.DK_DV VALUES ();
-
-----------------------------------------------------
--- Trigger UPDATE trên bảng PHIEU_DK_P
--- Kiểm tra DL đang có
-SELECT PDK_P.MAPDK, NGAYDK_P, NGAYDK_DV
-FROM CNA.PHIEU_DK_P PDK_P JOIN CNA.DK_DV DK_DV ON PDK_P.MAPDK = DK_DV.MAPDK;
-
--- TH lỗi: VN: NGAYDK_P = 15/01/1956, NGAYDK_DV = '13h15 20/12/2015' 
---          -> Sửa NGAYDK_P = 20/12/2016
-UPDATE CNA.PHIEU_DK_P
-SET NGAYDK_P = ''
-WHERE MAPDK = '';
-
--- TH Thành công: VN: NGAYDK_P = 15/01/1956, NGAYDK_DV = '13h15 20/12/2015' 
---          -> Sửa NGAYDK_P = 20/12/2000
-UPDATE CNA.PHIEU_DK_P
-SET NGAYDK_P = ''
-WHERE MAPDK = '';
-
----------------------------------------------------
--- Trả DL lại trạng thái ban đầu khi chưa kiểm tra Trigger
-DELETE FROM CNA.DK_DV
-WHERE MADK_DV = '';
-
-UPDATE CNA.DK_DV
-SET NGAYDK_DV = ''
-WHERE MAPDK = '';
-
-UPDATE CNA.PHIEU_DK_P
-SET NGAYDK_P = ''
-WHERE MAPDK = '';
-
--------------------------------------------------------------------------------
 -- III. Trên SQL Plus đăng nhập /as sysdba, sau đó tạo user và phân quyền
 ----- GiamDoc 
     CREATE USER GiamDoc IDENTIFIED BY GiamDoc;
 
-	GRANT CONNECT TO GiamDoc; 
+    GRANT CONNECT TO GiamDoc; 
     
-	GRANT SELECT ON CNA.LOAIPHONG TO GiamDoc; 
+    GRANT SELECT ON CNA.LOAIPHONG TO GiamDoc; 
     GRANT SELECT ON CNA.CHINHANH TO GiamDoc;
     GRANT SELECT ON CNA.PHONG TO GiamDoc;
     GRANT SELECT ON CNA.CHUCVU TO GiamDoc;
@@ -624,23 +547,23 @@ WHERE MAPDK = '';
     GRANT SELECT ON CNA.HOADON_QL TO GiamDoc;
     GRANT SELECT ON CNA.HOADON_NV TO GiamDoc;
     
-	GRANT CREATE DATABASE LINK TO GiamDoc; 
+    GRANT CREATE DATABASE LINK TO GiamDoc; 
 
 ----- QuanLy
     CREATE USER QuanLy IDENTIFIED BY QuanLy;
 
-	GRANT CONNECT TO QuanLy;
+    GRANT CONNECT TO QuanLy;
     
-	GRANT SELECT ON CNA.NHANVIEN TO QuanLy;
+    GRANT SELECT ON CNA.NHANVIEN TO QuanLy;
     GRANT SELECT ON CNA.HOADON_QL TO QuanLy;
 
 ----- NhanVien
-	CREATE USER NhanVien IDENTIFIED BY NhanVien;
+    CREATE USER NhanVien IDENTIFIED BY NhanVien;
     
     GRANT CONNECT TO NhanVien;
     
     GRANT SELECT ON CNA.LOAIPHONG TO NhanVien; 
-	GRANT SELECT ON CNA.PHONG TO NhanVien; 
+    GRANT SELECT ON CNA.PHONG TO NhanVien; 
     GRANT SELECT ON CNA.KHACHHANG TO NhanVien; 
     GRANT SELECT ON CNA.PHIEU_DK_P TO NhanVien; 
     GRANT SELECT ON CNA.DICHVU TO NhanVien; 
@@ -659,16 +582,3 @@ CONNECT NhanVien/NhanVien;
 CREATE DATABASE LINK NV_dblink CONNECT TO NhanVien IDENTIFIED BY NhanVien 
     USING 'nv_sn';
 
--------------------------------------------------------------------------------
--- V. Thực hiện Procedure, Function phân tán
--- 5.1 Thực hiện Procedure
-
-
---------------------------------------
--- 5.2 Thực hiện Function
-
-
--------------------------------------------------------------------------------
--- VI. Thực hiện các câu truy vấn
-/* Query 1. Tài khoản nhân viên:  */
-CONNECT NhanVien/NhanVien;
