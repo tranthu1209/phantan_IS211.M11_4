@@ -436,6 +436,7 @@ insert into CNB.DICHVU values('DV2','KARAOKE',500000);
 insert into CNB.DICHVU values('DV3','GIẶT ỦI',200000);
 insert into CNB.DICHVU values('DV4','MÁT SA',800000);
 insert into CNB.DICHVU values('DV5','TẮM HƠI',400000);
+insert into CNB.DICHVU values('DV6','BUFFE',300000);
 
 ----Insert dữ liệu vào table DK_DV
 insert into CNB.DK_DV values('DK_DV22','DV1','PDK17','15/03/2011','CNB');
