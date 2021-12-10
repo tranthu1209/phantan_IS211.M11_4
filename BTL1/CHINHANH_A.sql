@@ -426,6 +426,7 @@ insert into CNA.DICHVU values('DV2','KARAOKE',500000);
 insert into CNA.DICHVU values('DV3','GIẶT ỦI',200000);
 insert into CNA.DICHVU values('DV4','MÁT SA',800000);
 insert into CNA.DICHVU values('DV5','TẮM HƠI',400000);
+insert into CNA.DICHVU values('DV6','BUFFE',300000); 
 
 ----Insert dữ liệu vào table DK_DV
 insert into CNA.DK_DV values('DK_DV01','DV1','PDK01','12/06/2006','CNA');
@@ -465,6 +466,9 @@ insert into CNA.DK_DV values('DK_DV69','DV3','PDK60','02/09/2019','CNA');
 insert into CNA.DK_DV values('DK_DV72','DV4','PDK67','04/06/2020','CNA');
 insert into CNA.DK_DV values('DK_DV74','DV3','PDK69','03/11/2020','CNA');
 insert into CNA.DK_DV values('DK_DV76','DV1','PDK71','12/09/2021','CNA');
+insert into CNA.DK_DV values('DK_DV82','DV4','PDK56','22/12/2021','CNA'); 
+insert into CNA.DK_DV values('DK_DV83','DV5','PDK56','22/12/2021','CNA'); 
+insert into CNA.DK_DV values('DK_DV84','DV6','PDK56','22/12/2021','CNA'); 
 
 ----Insert dữ liệu vào table HOADON_QL
 insert into CNA.HOADON_QL values('HD01','10/02/2007',1,'NV19','PDK02','CNA');
