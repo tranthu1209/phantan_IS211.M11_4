@@ -40,7 +40,7 @@ MINUS
 SELECT DISTINCT DV_B.MADV, TENDV
 FROM CNB.DICHVU DV_B JOIN CNB.DK_DV DK_DV_B ON DV_B.MADV = DK_DV_B.MADV;
 
-/* Query 3. Tài khoản nhân viên: Cho biết laoi phòng nào được đăng ký nhiều nhất
+/* Query 3. Tài khoản nhân viên: Cho biết loại phòng nào được đăng ký nhiều nhất
             ở cả 2 chi nhánh */
 CONNECT NhanVien/NhanVien;
 
