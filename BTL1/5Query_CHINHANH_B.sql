@@ -1,5 +1,5 @@
 -- VI. Thực hiện các câu truy vấn
-/* Query 1. Tài khoản giám đốc:  Cho biết thông tin nhân viên mang lại doanh thu nhiều nhất ở từng chi nhánh*/
+/* Query 6. Tài khoản giám đốc:  Cho biết thông tin nhân viên mang lại doanh thu nhiều nhất ở từng chi nhánh*/
 CONNECT GiamDoc/GiamDoc;
 
 SELECT NV_B.MANV, TENNV, TENCN
@@ -29,7 +29,7 @@ HAVING SUM(TONGTIEN) >= ALL
 			GROUP BY NV_A.MANV, TENNV, TENCN
 		);
 
-/* Query 2. Tài khoản giám đốc: Cho biết thông tin dịch vụ được đăng ký tại chi 
+/* Query 7. Tài khoản giám đốc: Cho biết thông tin dịch vụ được đăng ký tại chi 
             chi nhánh A nhưng không được đăng ký tại chi nhánh B */
 CONNECT GiamDoc/GiamDoc;
 
@@ -40,7 +40,7 @@ MINUS
 SELECT DISTINCT DV_B.MADV, TENDV
 FROM CNB.DICHVU DV_B JOIN CNB.DK_DV DK_DV_B ON DV_B.MADV = DK_DV_B.MADV;
 
-/* Query 3. Tài khoản nhân viên: Cho biết loại phòng nào được đăng ký nhiều nhất
+/* Query 8. Tài khoản nhân viên: Cho biết loại phòng nào được đăng ký nhiều nhất
             ở cả 2 chi nhánh */
 CONNECT NhanVien/NhanVien;
 
@@ -54,7 +54,7 @@ FROM
     SELECT LP_A.MALP AS MALP, TENLP, P_A.MAPHONG
     FROM CNA.LOAIPHONG@NV_dblink LP_A JOIN CNA.PHONG@NV_dblink P_A 
                 ON LP_A.MALP = P_A.MALP
-            JOIN CNA.PHIEU_DK_P@NVdblink PDK_P_A ON PDK_P_A.MAPHONG = P_A.MAPHONG
+            JOIN CNA.PHIEU_DK_P@NV_dblink PDK_P_A ON PDK_P_A.MAPHONG = P_A.MAPHONG
 )
 GROUP BY MALP, TENLP
 HAVING COUNT(*) >= ALL
@@ -69,12 +69,13 @@ HAVING COUNT(*) >= ALL
                 SELECT LP_A.MALP AS MALP, TENLP, P_A.MAPHONG
                 FROM CNA.LOAIPHONG@NV_dblink LP_A JOIN CNA.PHONG@NV_dblink P_A 
                         ON LP_A.MALP = P_A.MALP
-                    JOIN CNA.PHIEU_DK_P@NVdblink PDK_P_A ON PDK_P_A.MAPHONG = P_A.MAPHONG
+                    JOIN CNA.PHIEU_DK_P@NV_dblink PDK_P_A ON PDK_P_A.MAPHONG = P_A.MAPHONG
             )
             GROUP BY MALP, TENLP
         );
+        
 
-/* Query 4. Tài khoản nhân viên: Tính doanh thu trung bình theo từng năm của cả 
+/* Query 9. Tài khoản nhân viên: Tính doanh thu trung bình theo từng năm của cả 
             2 chi nhánh */
 CONNECT NhanVien/NhanVien;
 
@@ -90,7 +91,7 @@ FROM
 GROUP BY THANG
 ORDER BY THANG;
 
-/* Query 5. Truy vấn cục bộ tại chi nhánh B bằng tài khoản quản lý: Cho biết 
+/* Query 10. Truy vấn cục bộ tại chi nhánh B bằng tài khoản quản lý: Cho biết 
             thông tin khách hàng và phản hồi đánh giá của khách hàng đã đăng ký 
             dịch vụ KARAOKE vào tháng 10 hằng năm*/
 CONNECT QuanLy/QuanLy;
