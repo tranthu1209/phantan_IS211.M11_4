@@ -184,9 +184,9 @@ BEGIN
 
         -- Lấy thông tin KH đăng ký
         SELECT  KH.MAKH, TENKH, COUNT(*) INTO var_makh, var_tenkh, var_solan
-        FROM CNB.KHACHHANG@GD_dblink KH JOIN CNA.PHIEU_DK_P@GD_dblink PDK 
+        FROM CNB.KHACHHANG@GD_dblink KH JOIN CNB.PHIEU_DK_P@GD_dblink PDK 
                 ON KH.MAKH = PDK.MAKH
-            JOIN CNA.DK_DV@GD_dblink DK_DV ON DK_DV.MAPDK = PDK.MAPDK
+            JOIN CNB.DK_DV@GD_dblink DK_DV ON DK_DV.MAPDK = PDK.MAPDK
         WHERE DK_DV.MADV = madv_in AND KH.MAKH = cur_makh
         GROUP BY KH.MAKH, TENKH;
         
