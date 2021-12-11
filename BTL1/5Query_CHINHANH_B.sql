@@ -40,8 +40,7 @@ MINUS
 SELECT DISTINCT DV_B.MADV, TENDV
 FROM CNB.DICHVU DV_B JOIN CNB.DK_DV DK_DV_B ON DV_B.MADV = DK_DV_B.MADV;
 
-/* Query 8. Tài khoản nhân viên: Cho biết loại phòng nào được đăng ký nhiều nhất
-            ở cả 2 chi nhánh */
+/* Query 8. Tài khoản nhân viên: Cho biết loại phòng nào được đăng ký nhiều nhất*/
 CONNECT NhanVien/NhanVien;
 
 SELECT MALP, TENLP
@@ -75,8 +74,7 @@ HAVING COUNT(*) >= ALL
         );
         
 
-/* Query 9. Tài khoản nhân viên: Tính doanh thu trung bình theo từng năm của cả 
-            2 chi nhánh */
+/* Query 9. Tài khoản nhân viên: Tính doanh thu trung bình theo từng tháng*/
 CONNECT NhanVien/NhanVien;
 
 SELECT THANG, AVG(TONGTIEN) AS DOANHTHU_TB
