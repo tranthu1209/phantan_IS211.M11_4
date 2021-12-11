@@ -34,8 +34,6 @@ JOIN
             SELECT MAPHONG, MAKH, TENNV, MANV, SONGAY, DANHGIA
             FROM
 			(
-                SELECT MAPDK, H.MANV, TENNV, SONGAY, DANHGIA
-                FROM
                 (
                     SELECT MANV, TENNV
                     FROM CNA.NHANVIEN
