@@ -9,6 +9,7 @@ GRANT CONNECT, DBA TO BTL1;
 -------------------------------------------------------------------------------
 -- 2. Mở SQL Dev, tạo connect BTL1 dùng user BTL1
 ----- 2.1 Chạy lệnh tạo bảng
+connect BTL1/BTL1
 CREATE TABLE BTL1.LOAIPHONG
 (
 	MALP char(3) PRIMARY KEY,
