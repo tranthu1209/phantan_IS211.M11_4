@@ -1,5 +1,3 @@
-var async = require("async");
-var logger = require('winston');
 var Riak = require("basho-riak-client");
 
 //Connecting to Riak
@@ -14,136 +12,106 @@ var client = new Riak.Client(["192.168.1.4:8087"], function (err, c) {
 //list user
 var users = [
   {
-    userid: "1",
-    username: "tranthu@gmail.com",
-    name: "Trần Thư",
-    bio: "Cố lên",
-    birthday: "2000-10-20",
+    userid: "18521464",
+    username: "18521464@gm.uit.edu.vn",
+    name: "Trần Anh Thư",
+    bio: "Đang học tại THPT Tây Sơn",
+    birthday: "2000-09-12",
     sex: "female",
     location: "Vietnam",
-
   },
   {
-    userid: "2",
-    username: "tranthanh@gmail.com",
-    name: "Trần Thành",
-    bio: "Cố lên",
+    userid: "18521414",
+    username: "18521414@gm.uit.edu.vn",
+    name: "Trần Quốc Thành",
+    bio: "Đang học tại UIT",
     birthday: "2000-06-13",
     sex: "male",
     location: "Vietnam",
-
   },
   {
-    userid: "3",
-    username: "hodung@gmail.com",
-    name: "Hồ Dũng",
-    bio: "Cố lên",
+    userid: "18520630",
+    username: "18520630@gm.uit.edu.vn",
+    name: "Hồ Anh Dũng",
+    bio: "Đang học tại UIT",
     birthday: "2000-05-20",
     sex: "male",
     location: "Vietnam",
-
   },
 ];
 
-
-//Creating Objects In Riak KV
-//Store user
-function store_user(user) {
-  logger.info("Storing Data");
+var async = require("async");
+var logger = require("winston");
+//Function store Object in Riak KV
+function storeUser(user) {
+  logger.info("Storing user %s", user.userid);
   client.storeValue(
     {
-      bucket: 'users',
+      bucket: "users",
       key: user.userid,
-      value: user
+      value: user,
     },
     function (err, rslt) {
       if (err) {
-          throw new Error(err);
+        throw new Error(err);
       }
     }
   );
 }
 
-
-//Store list user
-function storeProfile(profiles) {
-  var storeProfileFuncs = [];
-  users.forEach(function (p) {
-    storeProfileFuncs.push(function (async_cb) {
-      store_user(p);
+//Store users
+var storeFuncs = [];
+users.forEach(function (user) {
+    storeFuncs.push(function (async_cb) {
+        storeUser(user)
     });
-  });
-  async.parallel(storeUserFuncs, function (err, rslts) {
+});
+async.parallel(storeFuncs, function (err, rslts) {
     if (err) {
-      throw new Error(err);
+        throw new Error(err);
     }
-  });
-}
+});
 
-storeProfile(users);
 
 
 //Reading from Riak
-function fetchObject(bucket, key) {
+function fetchUser(key) {
   var riakObj, KH26;
-  client.fetchValue({ bucket: bucket, key: key, convertToJs: true },
+  client.fetchValue(
+    { bucket: 'users', key: key, convertToJs: true },
     function (err, rslt) {
       if (err) {
         throw new Error(err);
       } else {
         riakObj = rslt.values.shift();
         if (!riakObj) {
-          logger.info("Can NOT found %s in %s", key, bucket);
+          logger.info("Can NOT found user %s", key);
         } else {
-          value = riakObj.value
+          value = riakObj.value;
           console.log(value);
         }
       }
     }
   );
 }
-//Read user 4
-fetchObject('users', '4');
+//Read user "18521288"
+fetchUser("18521288");
 
-//Modifying Existing Data
-function updateBio(bucket, key, newBio) {
-  var riakObj, KH26;
-  client.fetchValue({ bucket: bucket, key: key, convertToJs: true },
-    function (err, rslt) {
-      if (err) {
-        throw new Error(err);
-      } else {
-        riakObj = rslt.values.shift();
-        if (!riakObj) {
-          logger.info("Can NOT found %s in %s", key, bucket);
-        } else {
-          value = riakObj.value
-          value.bio = newBio;
-          riakObj.setValue(value);
-          store_user(riakObj);
-        }
-      }
-    }
-  );
-}
-
-//Deleting Data
-function delete_user(bucket, key) {
+//Function Delete User
+function deleteUser(key) {
   client.deleteValue(
     {
-      bucket: bucket,
+      bucket: 'users',
       key: key,
     },
     function (err, rslt) {
       if (err) {
-          throw new Error(err);
+        throw new Error(err);
       }
     }
   );
 }
-//Delete user 4
-delete_user('users', '4');
-//Read user 4
-fetchObject('users', '4');
-
-
+//Delete user "18521288"
+deleteUser("18521288");
+//Read user "18521288"
+fetchUser("18521288");

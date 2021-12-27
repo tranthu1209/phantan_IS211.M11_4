@@ -1,5 +1,3 @@
-var async = require("async");
-var logger = require('winston');
 var Riak = require("basho-riak-client");
 
 //Connecting to Riak
@@ -11,102 +9,91 @@ var client = new Riak.Client(["192.168.1.8:8087"], function (err, c) {
   }
 });
 
-//Reading from Riak
-function fetchObject(bucket, key) {
-  var riakObj;
-  client.fetchValue({ bucket: bucket, key: key, convertToJs: true },
+var logger = require("winston");
+//Function store user
+function storeUser(user) {
+  logger.info("Storing user %s", user.userid);
+  client.storeValue(
+    {
+      bucket: "users",
+      key: user.userid,
+      value: user,
+    },
+    function (err, rslt) {
+      if (err) {
+        throw new Error(err);
+      }
+    }
+  );
+}
+//Create user "18521288"
+var user = {
+  userid: "18521288",
+  username: "18521288@gm.uit.edu.vn",
+  name: "Trần Minh Quân",
+  bio: "Đang học tại UIT",
+  birthday: "2000-05-10",
+  sex: "male",
+  location: "Vietnam",
+};
+storeUser(user);
+
+
+//Function read from Riak
+function fetchUser(key) {
+  var riakObj, KH26;
+  client.fetchValue(
+    { bucket: 'users', key: key, convertToJs: true },
     function (err, rslt) {
       if (err) {
         throw new Error(err);
       } else {
         riakObj = rslt.values.shift();
         if (!riakObj) {
-          logger.info("Can NOT found %s in %s", key, bucket);
+          logger.info("Can NOT found user %s", key);
         } else {
-          value = riakObj.value
+          value = riakObj.value;
           console.log(value);
         }
       }
     }
   );
 }
-//Read user 3
-fetchObject('users', '3');
+//Read user "18521464"
+fetchUser("18521464");
 
-//Creating Objects In Riak KV
-//user
-var user = {
-    userid: "4",
-    username: "tranquan@gmail.com",
-    name: "Trần Quân",
-    bio: "Cố lên",
-    birthday: "2000-10-20",
-    sex: "male",
-    location: "Vietnam",
-  }
-
-//Store user
-function store_user(user) {
-  logger.info("Storing Data");
-  client.storeValue(
-    {
-      bucket: 'users',
-      key: user.userid,
-      value: user
-    },
-    function (err, rslt) {
-      if (err) {
-          throw new Error(err);
-      }
-    }
-  );
-}
-store_user(user);
 
 
 //Modifying Existing Data
-function updateBio(bucket, key, newBio) {
-  var riakObj, KH26;
-  client.fetchValue({ bucket: bucket, key: key, convertToJs: true },
+function updateBio(key, newBio) {
+  var riakObj;
+  client.fetchValue(
+    { bucket: 'users', key: key, convertToJs: true },
     function (err, rslt) {
       if (err) {
         throw new Error(err);
       } else {
         riakObj = rslt.values.shift();
         if (!riakObj) {
-          logger.info("Can NOT found %s in %s", key, bucket);
+          logger.info("Can NOT found %s", key);
         } else {
-          value = riakObj.value
+          value = riakObj.value;
           value.bio = newBio;
           riakObj.setValue(value);
-          store_user(riakObj);
+          client.storeValue({ value: riakObj }, function (err, rslt) {
+            if (err) {
+              throw new Error(err);
+            }
+          });
+          logger.info("Update bio user %s", key);
         }
       }
     }
   );
 }
-//update bio user 3
-updateBio('users', '3', 'Yêu màu hông, ghét sự giả dối');
+//update bio user "18521464"
+updateBio("18521464", "Đang học tại UIT");
 //read user 3
-fetchObject('users', '3');
+fetchUser("18521464");
 
-
-//Deleting Data
-function delete_user(bucket, key) {
-  client.deleteValue(
-    {
-      bucket: bucket,
-      key: key,
-    },
-    function (err, rslt) {
-      if (err) {
-          throw new Error(err);
-      }
-    }
-  );
-}
-//Delete user 3
-delete_user('users', '3');
-//Read user 3
-fetchObject('users', '3');
 
