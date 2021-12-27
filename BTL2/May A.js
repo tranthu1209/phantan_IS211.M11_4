@@ -1,10 +1,9 @@
-//Connecting to Riak
 var async = require("async");
 var logger = require('winston');
 var Riak = require("basho-riak-client");
-var node = ["192.168.1.5:8087"];
 
-var client = new Riak.Client(node, function (err, c) {
+//Connecting to Riak
+var client = new Riak.Client(["192.168.1.4:8087"], function (err, c) {
   if (err) {
     throw new Error(err);
   } else {

@@ -1,10 +1,9 @@
-//Connecting to Riak
 var async = require("async");
 var logger = require('winston');
 var Riak = require("basho-riak-client");
-var node = ["192.168.1.8:8087"];
 
-var client = new Riak.Client(node, function (err, c) {
+//Connecting to Riak
+var client = new Riak.Client(["192.168.1.8:8087"], function (err, c) {
   if (err) {
     throw new Error(err);
   } else {
@@ -14,7 +13,7 @@ var client = new Riak.Client(node, function (err, c) {
 
 //Reading from Riak
 function fetchObject(bucket, key) {
-  var riakObj, KH26;
+  var riakObj;
   client.fetchValue({ bucket: bucket, key: key, convertToJs: true },
     function (err, rslt) {
       if (err) {
